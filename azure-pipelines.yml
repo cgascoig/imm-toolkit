@@ -17,7 +17,6 @@ steps:
   - task: gitversion/execute@0
     name: version # id to later be referenced
     displayName: Determine Version
-
   - displayName: Display GitVersion outputs (step output)
     script: |
       echo "Major: $(version.major)"
