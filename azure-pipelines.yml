@@ -10,47 +10,23 @@ pool:
 steps:
   - checkout: self
     fetchDepth: 0
+
   - task: gitversion/setup@0
     displayName: Install GitVersion
     inputs:
       versionSpec: '5.x'
+
   - task: gitversion/execute@0
     name: version # id to later be referenced
     displayName: Determine Version
-  - displayName: Display GitVersion outputs (step output)
-    script: |
-      echo "Major: $(version.major)"
-      echo "Minor: $(version.minor)"
-      echo "Patch: $(version.patch)"
-      echo "PreReleaseTag: $(version.preReleaseTag)"
-      echo "PreReleaseTagWithDash: $(version.preReleaseTagWithDash)"
-      echo "PreReleaseLabel: $(version.preReleaseLabel)"
-      echo "PreReleaseNumber: $(version.preReleaseNumber)"
-      echo "WeightedPreReleaseNumber: $(version.weightedPreReleaseNumber)"
-      echo "BuildMetaData: $(version.buildMetaData)"
-      echo "BuildMetaDataPadded: $(version.buildMetaDataPadded)"
-      echo "FullBuildMetaData: $(version.fullBuildMetaData)"
-      echo "MajorMinorPatch: $(version.majorMinorPatch)"
-      echo "SemVer: $(version.semVer)"
-      echo "LegacySemVer: $(version.legacySemVer)"
-      echo "LegacySemVerPadded: $(version.legacySemVerPadded)"
-      echo "AssemblySemVer: $(version.assemblySemVer)"
-      echo "AssemblySemFileVer: $(version.assemblySemFileVer)"
-      echo "FullSemVer: $(version.fullSemVer)"
-      echo "InformationalVersion: $(version.informationalVersion)"
-      echo "BranchName: $(version.branchName)"
-      echo "EscapedBranchName: $(version.escapedBranchName)"
-      echo "Sha: $(version.sha)"
-      echo "ShortSha: $(version.shortSha)"
-      echo "NuGetVersionV2: $(version.nuGetVersionV2)"
-      echo "NuGetVersion: $(version.nuGetVersion)"
-      echo "NuGetPreReleaseTagV2: $(version.nuGetPreReleaseTagV2)"
-      echo "NuGetPreReleaseTag: $(version.nuGetPreReleaseTag)"
-      echo "VersionSourceSha: $(version.versionSourceSha)"
-      echo "CommitsSinceVersionSource: $(version.commitsSinceVersionSource)"
-      echo "CommitsSinceVersionSourcePadded: $(version.commitsSinceVersionSourcePadded)"
-      echo "UncommittedChanges: $(version.uncommittedChanges)"
-      echo "CommitDate: $(version.commitDate)"
+
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        Write-Host "Sha: $(GitVersion.sha)"
+        Write-Host "SemVer: $(GitVersion.semVer)"
+
   - script: |
       packer init build/
       packer build build/
