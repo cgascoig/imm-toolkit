@@ -1,0 +1,17 @@
+---
+- name: "Update OS"
+  apt:
+    force_apt_get: true
+    name: "*"
+    state: latest
+    update_cache: "yes"
+- name: "Install required OS packages"
+  apt:
+    name:
+      - curl
+      - wget
+      - net-tools
+      - nginx
+      - ntp
+      - python3-pip
+      # - terraform

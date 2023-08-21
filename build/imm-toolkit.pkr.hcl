@@ -4,6 +4,10 @@ packer {
       source  = "github.com/hashicorp/azure"
       version = "~> 1"
     }
+    ansible = {
+      source  = "github.com/hashicorp/ansible"
+      version = "~> 1"
+    }
   }
 }
 
@@ -35,5 +39,27 @@ source "azure-arm" "basic-example" {
 
 build {
   sources = ["sources.azure-arm.basic-example"]
+
+  provisioner "shell" {
+    inline = [
+      "echo Sleeping 30 secs",
+      "sleep 30",
+
+      "echo Updating apt",
+      "sudo apt-get update",
+
+      "echo Running apt-get upgrade",
+      "sudo apt-get upgrade -y",
+
+      "echo Installing ansible",
+      "sudo apt-get install -y ansible",
+    ]
+  }
+
+  provisioner "ansible-local" {
+    playbook_dir = "ansible"
+    playbook_file = "ansible/main.yml"
+    // role_paths    = ["${path.cwd}/ansible/roles/*"]
+  }
 }
 
