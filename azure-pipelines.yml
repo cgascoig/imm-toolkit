@@ -25,4 +25,4 @@ steps:
       packer build build/
     displayName: 'Run packer build'
     env:
-      PKR_VAR_build_version: "$(GitVersion.InformationalVersion)"
+      PKR_VAR_build_version: "$(GitVersion.SemVer)-$(GitVersion.CommitsSinceVersionSource)-$(GitVersion.ShortSha)"
