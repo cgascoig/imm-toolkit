@@ -20,13 +20,6 @@ steps:
     name: version # id to later be referenced
     displayName: Determine Version
 
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        Write-Host "Sha: $(GitVersion.sha)"
-        Write-Host "SemVer: $(GitVersion.semVer)"
-
   - script: |
       packer init build/
       packer build build/
