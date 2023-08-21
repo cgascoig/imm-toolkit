@@ -31,3 +31,5 @@ steps:
       packer init build/
       packer build build/
     displayName: 'Run packer build'
+    env:
+      PKR_VAR_build_version: "$(GitVersion.InformationalVersion)"

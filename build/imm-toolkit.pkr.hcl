@@ -7,10 +7,17 @@ packer {
   }
 }
 
+data "git-repository" "cwd" {}
+
+locals {
+  build_version     = var.build_version
+  image_name = "imm-toolkit-${local.build_version}"
+}
+
 source "azure-arm" "basic-example" {
   build_resource_group_name = "azure-devops-cgascoig-imm-toolkit"
 
-  managed_image_name = "imm-toolkit-{{isotime \"200601020304\"}}"
+  managed_image_name = local.image_name
   managed_image_resource_group_name = "azure-devops-cgascoig-imm-toolkit"
 
   os_type = "Linux"
