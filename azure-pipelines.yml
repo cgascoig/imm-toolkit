@@ -26,3 +26,9 @@ steps:
     displayName: 'Run packer build'
     env:
       PKR_VAR_build_version: "$(GitVersion.SemVer)-$(GitVersion.CommitsSinceVersionSource)-$(GitVersion.ShortSha)"
+      HCP_CLIENT_ID: "$(HCP_CLIENT_ID)"
+      HCP_CLIENT_SECRET: "$(HCP_CLIENT_SECRET)"
+      HCP_PROJECT_ID: "$(HCP_PROJECT_ID)"
+
+variables:
+  - group: HCP

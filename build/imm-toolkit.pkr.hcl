@@ -33,7 +33,6 @@ source "azure-arm" "basic-example" {
     dept = "engineering"
   }
 
-  #location = "Australia Southeast"
   vm_size = "Standard_DS1_v2"
 }
 
@@ -59,7 +58,21 @@ build {
   provisioner "ansible-local" {
     playbook_dir = "ansible"
     playbook_file = "ansible/main.yml"
-    // role_paths    = ["${path.cwd}/ansible/roles/*"]
+  }
+
+  hcp_packer_registry {
+    bucket_name = "imm-toolkit"
+    description = "IMM Toolkit learning VM."
+
+    bucket_labels = {
+      "os"             = "Ubuntu",
+      "ubuntu-version" = "22.04 LTS",
+    }
+
+    build_labels = {
+      "build-time"   = timestamp()
+      "build-source" = basename(path.cwd)
+    }
   }
 }
 
