@@ -1,0 +1,37 @@
+---
+- name: "Install Python"
+  apt:
+    name:
+      - python3-pip
+- name: Create user directories
+  file:
+    path: "/home/{{ username }}/{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0700
+  loop:
+    - Downloads
+    - Logs
+    - github
+- name: Git checkout
+  ansible.builtin.git:
+    repo: 'https://github.com/scotttyso/intersight_iac'
+    dest: /home/{{ username }}/github/intersight_iac
+- name: Setup links in /usr/local/bin
+  file:
+    src: "{{ item.target }}"
+    dest: "{{ item.link }}"
+    state: link
+    owner: root
+    group: root
+  loop:
+    - {target: "/home/imm-toolkit/github/intersight_iac/ezimm.py", link: "/usr/local/bin/ezimm.py"}
+    - {target: "/home/imm-toolkit/github/intersight_iac/ezci.py", link: "/usr/local/bin/ezci.py"}
+    - {target: "/home/imm-toolkit/github/intersight_iac/ezvcenter.ps1", link: "/usr/local/bin/ezvcenter.ps1"}
+- name: Install required python modules
+  ansible.builtin.pip:
+    requirements: /home/{{ username }}/github/intersight_iac/requirements.txt
+- name: Install Intersight python module
+  ansible.builtin.pip:
+    name: intersight

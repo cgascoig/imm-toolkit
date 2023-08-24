@@ -1,0 +1,20 @@
+---
+- name: Install Hashicorp GPG key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+- name: Add the official HashiCorp repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://apt.releases.hashicorp.com jammy main"
+    state: present
+    filename: hashicorp
+- name: "Install terraform"
+  apt:
+    name:
+      - terraform
+    force_apt_get: true
+    state: latest
+    update_cache: "yes"
+- name: Install Terraform Autocomplete
+  shell: |
+    terraform -install-autocomplete || /bin/true

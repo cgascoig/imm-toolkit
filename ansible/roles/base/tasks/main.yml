@@ -11,7 +11,8 @@
       - curl
       - wget
       - net-tools
-      - nginx
       - ntp
-      - python3-pip
-      # - terraform
+- name: "Create imm-toolkit user"
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: /bin/bash

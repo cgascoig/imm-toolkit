@@ -1,0 +1,11 @@
+[Unit]
+Description=Nginx First Boot Script
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/nginx-firstboot.sh
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

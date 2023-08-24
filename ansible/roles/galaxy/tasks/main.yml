@@ -1,0 +1,8 @@
+---
+- name: "Install Ansible"
+  apt:
+    name:
+      - ansible
+- name: Install Intersight Ansible collection
+  shell: |
+    ansible-galaxy collection install cisco.intersight

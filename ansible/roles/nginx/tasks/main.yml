@@ -1,0 +1,53 @@
+---
+- name: "Install required OS packages"
+  apt:
+    name:
+      - nginx
+- name: install nginx firstboot script
+  copy:
+    src: nginx-firstboot.sh
+    dest: /usr/local/bin/nginx-firstboot.sh
+    owner: root
+    group: root
+    mode: 0755
+- name: install nginx firstboot service unit
+  copy:
+    src: nginx-firstboot.service
+    dest: /etc/systemd/system/nginx-firstboot.service
+    owner: root
+    group: root
+    mode: 0644
+- name: Enable firstboot service
+  ansible.builtin.systemd:
+    name: nginx-firstboot
+    enabled: true
+    daemon_reload: true
+    masked: no
+- name: setup upload dir
+  file:
+    path: /var/www/upload
+    state: directory
+- name: create upload test file
+  ansible.builtin.copy:
+    content: ""
+    dest: /var/www/upload/test.txt
+    mode: 0644
+- name: Setup nginx config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+- name: Setup nginx default site
+  copy:
+    src: nginx-sites-default
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: 0644
+- name: Enable service nginx
+  ansible.builtin.systemd:
+    name: nginx
+    enabled: true
+    masked: no

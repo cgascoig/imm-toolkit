@@ -1,8 +1,19 @@
 ---
+
 - become: "yes"
   become_method: sudo
   debugger: never
   gather_facts: "yes"
   hosts: all
+  vars: 
+    username: imm-toolkit
   roles:
     - base
+    - nginx
+    - pymodules
+    - galaxy
+    - powershell
+    - terraform
+    - isctl
+    - role: clean
+      tags: clean

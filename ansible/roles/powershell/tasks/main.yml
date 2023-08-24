@@ -1,0 +1,15 @@
+---
+- name: Install Powershell
+  community.general.snap:
+    name:
+      - powershell
+    classic: true
+
+- name: Install Powershell Intersight module
+  command: 
+    cmd: pwsh -Command Install-Module -Name Intersight.PowerShell -Force -Scope AllUsers
+    creates: /usr/local/share/powershell/Modules/Intersight.PowerShell
+- name: Install Powershell VMware module
+  command: 
+    cmd: pwsh -Command Install-Module -Name VMware.PowerCLI -Force -Scope AllUsers
+    creates: /usr/local/share/powershell/Modules/VMware.PowerCLI

@@ -1,0 +1,20 @@
+---
+- name: Install github python module
+  ansible.builtin.pip:
+    name: github3.py>=1.0.0a3
+- name: Find latest isctl release
+  community.general.github_release:
+    user: cgascoig
+    repo: isctl
+    action: latest_release
+  register: isctl_release
+- name: Download isctl release
+  ansible.builtin.unarchive:
+    src: "https://github.com/cgascoig/isctl/releases/download/{{ isctl_release.tag }}/isctl_{{ isctl_release.tag|trim('v') }}_Linux_x86_64.tar.gz"
+    dest: /usr/local/bin
+    remote_src: yes
+    creates: /usr/local/bin/isctl
+- name: Make isctl executable
+  ansible.builtin.file:
+    path: /usr/local/bin/isctl
+    mode: u=rwx,g=rx,o=rx
