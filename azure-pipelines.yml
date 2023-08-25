@@ -43,8 +43,8 @@ steps:
       HCP_PROJECT_ID: "$(HCP_PROJECT_ID)"
       AWS_ACCESS_KEY_ID: "$(AWS_ACCESS_KEY)"
       AWS_SECRET_ACCESS_KEY: "$(AWS_SECRET_KEY)"
-      PKR_VAR_aws_cert: "$($(az-azPackerCert.secureFilePath))"
-      PKR_VAR_aws_pk: "$($(az-azPackerPk.secureFilePath))"
+      PKR_VAR_aws_cert: "$(azPackerCert.secureFilePath)"
+      PKR_VAR_aws_pk: "$(azPackerPk.secureFilePath)"
 
 variables:
   - group: HCP
