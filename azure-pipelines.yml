@@ -34,7 +34,7 @@ steps:
 
   - script: |
       packer init build/
-      packer build build/
+      packer build -on-error=abort build/
     displayName: 'Run packer build'
     env:
       PKR_VAR_build_version: "$(GitVersion.SemVer)-$(GitVersion.CommitsSinceVersionSource)-$(GitVersion.BranchName)-$(GitVersion.ShortSha)"
