@@ -53,6 +53,8 @@ source "amazon-instance" "immtoolkit" {
   x509_cert_path = local.aws_cert
   x509_key_path = local.aws_pk
   x509_upload_path = "/tmp"
+
+  ami_name = local.image_name
 }
 
 build {
