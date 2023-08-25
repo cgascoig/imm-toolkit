@@ -10,6 +10,18 @@ pool:
 steps:
   - checkout: self
     fetchDepth: 0
+  
+  - task: DownloadSecureFile@1
+    name: azPackerCert
+    displayName: 'Download AWS IAM certificate'
+    inputs:
+      secureFile: 'az-packer-cert.pem'
+
+  - task: DownloadSecureFile@1
+    name: azPackerPk
+    displayName: 'Download AWS IAM certificate private key'
+    inputs:
+      secureFile: 'az-packer-pk.pem'
 
   - task: gitversion/setup@0
     displayName: Install GitVersion
@@ -29,6 +41,11 @@ steps:
       HCP_CLIENT_ID: "$(HCP_CLIENT_ID)"
       HCP_CLIENT_SECRET: "$(HCP_CLIENT_SECRET)"
       HCP_PROJECT_ID: "$(HCP_PROJECT_ID)"
+      AWS_ACCESS_KEY_ID: "$(AWS_ACCESS_KEY)"
+      AWS_SECRET_ACCESS_KEY: "$(AWS_SECRET_KEY)"
+      PKR_VAR_aws_cert: "$($(az-azPackerCert.secureFilePath))"
+      PKR_VAR_aws_pk: "$($(az-azPackerPk.secureFilePath))"
 
 variables:
   - group: HCP
+  - group: AWS IAM

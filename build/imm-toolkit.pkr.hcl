@@ -4,6 +4,10 @@ packer {
       source  = "github.com/hashicorp/azure"
       version = "~> 1"
     }
+    amazon = {
+      version = ">= 1.2.6"
+      source = "github.com/hashicorp/amazon"
+    }
     ansible = {
       source  = "github.com/hashicorp/ansible"
       version = "~> 1"
@@ -16,9 +20,11 @@ data "git-repository" "cwd" {}
 locals {
   build_version     = var.build_version
   image_name = "imm-toolkit-${local.build_version}"
+  aws_cert = var.aws_cert
+  aws_pk = var.aws_pk
 }
 
-source "azure-arm" "basic-example" {
+source "azure-arm" "immtoolkit" {
   build_resource_group_name = "azure-devops-cgascoig-imm-toolkit"
 
   managed_image_name = local.image_name
@@ -36,8 +42,24 @@ source "azure-arm" "basic-example" {
   vm_size = "Standard_DS1_v2"
 }
 
+source "amazon-instance" "immtoolkit" {
+  region = "ap-southeast-2"
+  source_ami = "ami-0310483fb2b488153"
+  instance_type = "t3.small"
+  ssh_username = "ubuntu"
+
+  account_id = "817382913279"
+  s3_bucket = "packer-images"
+  x509_cert_path = local.aws_cert
+  x509_key_path = local.aws_pk
+  x509_upload_path = "/tmp"
+}
+
 build {
-  sources = ["sources.azure-arm.basic-example"]
+  sources = [
+    "sources.azure-arm.immtoolkit",
+    "sources.amazon-instance.immtoolkit",
+  ]
 
   provisioner "shell" {
     inline = [
@@ -52,6 +74,9 @@ build {
 
       "echo Installing ansible",
       "sudo apt-get install -y ansible",
+
+      "echo Installing ec2-ami-tools",
+      "sudo apt-get install -y ec2-ami-tools",
     ]
   }
 
